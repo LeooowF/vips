@@ -1,0 +1,55 @@
+plugins {
+    id 'java'
+    id 'com.github.johnrengelman.shadow' version '6.0.0'
+    id 'net.minecrell.plugin-yml.bukkit' version '0.3.0'
+}
+
+group 'io.github.leooowf'
+version '1.0-SNAPSHOT'
+
+tasks.build.dependsOn('shadowJar')
+
+repositories {
+    mavenCentral()
+
+    maven { url = 'https://repo.ashcon.app/nexus/content/repositories/snapshots/' }
+    maven { url = 'https://oss.sonatype.org/content/groups/public/' }
+    maven { url = 'https://jitpack.io/' }
+}
+
+dependencies {
+    compileOnly 'app.ashcon:sportpaper-api:1.8.8-R0.1-SNAPSHOT'
+    compileOnly 'app.ashcon:sportpaper:1.8.8-R0.1-SNAPSHOT'
+
+    compileOnly 'net.luckperms:api:5.4'
+
+    implementation 'com.github.SaiintBrisson.command-framework:bukkit:1.2.0'
+    implementation 'com.github.HenryFabio:sql-provider:9561f20fd2'
+    implementation 'com.github.ben-manes.caffeine:caffeine:2.9.0' //higher only java 11
+
+    def lombok = 'org.projectlombok:lombok:1.18.24'
+    compileOnly lombok
+    annotationProcessor lombok
+}
+
+bukkit {
+    name = "vips"
+    main = 'io.github.leooowf.vips.VipsPlugin'
+    author = 'LeooowF'
+    version = "${project.version}"
+    depend = ['LuckPerms']
+}
+
+shadowJar {
+    archiveName("${project.name}-${project.version}.jar")
+
+    relocate 'com.henryfabio.sqlprovider', 'io.github.leooowf.vips.libs.sqlprovider'
+    relocate 'com.zaxxer.hikari', 'io.github.leooowf.vips.libs.hikari'
+}
+
+compileJava {
+    options.encoding('UTF-8')
+
+    sourceCompatibility('1.8')
+    targetCompatibility('1.8')
+}

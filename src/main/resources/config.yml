@@ -1,0 +1,9 @@
+database:
+  type: "sqlite" # sqlite ou mysql
+  sqlite:
+    fileName: "database.db"
+  mysql:
+    address: "localhost:3306"
+    username: "root"
+    password: ""
+    database: "test"
